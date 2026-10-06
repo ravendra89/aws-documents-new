@@ -1,0 +1,20 @@
+#Aurora MySQL cluster:
+These three Aurora features are related but solve different recovery problems.
+1. Automatic Backups
+• Purpose: Continuously store backup data and transaction logs.
+• Recovery Action: None by itself; it provides the data needed for recovery.
+Note: Automatic Backups themselves do not create a new DB cluster. They are just the backup data (snapshots + transaction logs) that Aurora stores automatically.
+However, when you restore from those automatic backups, Aurora performs a recovery operation such as Point-in-Time Recovery, and that recovery creates a new DB cluster.
+2. Point-in-Time Recovery (PITR)
+• Purpose: Restore to a specific timestamp.
+• Recovery Action: Restore from backups.
+• New DB Cluster Created? Yes
+• Keyword: "Restore"
+• Restores the database to a specific timestamp within the backup retention period.
+3. Backtrack
+• Purpose: Undo recent changes by rewinding the database.
+• Recovery Action: Roll back the existing cluster.
+• New DB Cluster Created? No
+• Keyword: "Rewind" or "Undo"
+• Rewinds an Aurora MySQL DB cluster to an earlier point in time without restoring from backups.
+Aurora Backtracking allows to rewind the database to a previous point in time within 72 hours.

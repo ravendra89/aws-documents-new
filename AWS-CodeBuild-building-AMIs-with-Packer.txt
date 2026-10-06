@@ -1,0 +1,23 @@
+# AWS CodeBuild- building AMIs with Packer
+
+1. update the AMI script with required change
+
+2. Go to CodeBuild - Build - build projects - select the Build projects related to application and click on it.
+
+3. Click on project details - go to source section and click on edit- and select the required branch - click on update source
+
+4. Go to environment section - click on edit - click on Additional configuration - Environment variables - replace the source AMI - and update the Environment variables.
+
+Note: GO to Public AMI - and copy the required and latest AMI id and use that AMI in the source AMI section in the Environment variables.
+
+5. Click on Start build
+
+6. AMI ID will be available in the build log section.
+
+7. copy the AMI Id - go to AMI console - check the latest AMI details in the own by me section.
+
+8. Next step is to use that AMI to update ASG Launch template/configuration  OR use that AMI to launch new instance.
+
+
+
+

@@ -1,0 +1,15 @@
+# Datadog API key
+https://app.datadoghq.com/organization-settings/api-keys?pageSize=100
+
+# Datadog installation on Server
+https://app.datadoghq.com/fleet/install-agent/latest?platform=overview
+
+# Datadog integration with sql server
+https://docs.datadoghq.com/integrations/sql-server/?tab=host#prerequisite
+
+# Datadog installation on Azure app service:
+https://docs.datadoghq.com/serverless/azure_app_service/windows_code/?tab=terraform
+
+# Azure app service datadog metrics:
+https://docs.datadoghq.com/integrations/azure-app-services/
+

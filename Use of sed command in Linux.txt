@@ -1,0 +1,14 @@
+# Use of "sed" command in Linux:
+The sed command in Linux stands for Stream Editor. It is used to search, find, replace, insert, and delete text in files or input streams without opening them in an editor.
+we can use sed command to comment out specific lines inside the file.
+It is used to Find certain lines (patterns)
+Modify them (and add # to comment them out)
+
+Example:
+Comment out load_module ... data_dome
+sudo sed -i 's/^load_module.*data_dome.*/#&/' /etc/nginx/nginx.conf
+What it does:
+Finds lines starting with load_module and containing data_dome
+^ → start of line
+.* → anything in between
+#& → adds # before the whole matched line

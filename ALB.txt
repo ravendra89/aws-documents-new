@@ -1,0 +1,64 @@
+For an AWS Application Load Balancer (ALB) target group, there are currently 3 routing algorithms available:
+1. Weighted random
+2. Least outstanding requests
+3. Round robin (default)
+
+1. Weighted Random Routing Algorithm
+With weighted random, the load balancer sends requests to targets (EC2 instances) randomly based on assigned weights.
+Example:
+• Instance A → weight 80
+• Instance B → weight 20
+Then roughly:
+• 80% of requests go to A
+• 20% go to B
+This is useful for:
+• Canary deployments
+• Gradual rollouts
+• A/B testing
+But it is not ideal for session-based legacy apps, because the same user may hit different servers on different requests.
+
+2. Least outstanding requests (LOR) is an Application Load Balancer target group routing algorithm that sends new requests to the least busy target.
+Think of it like this:
+• Instance A is processing 2 requests
+• Instance B is processing 15 requests
+With LOR, the ALB sends the next request to Instance A because it is less busy.
+
+3. Round Robin Routing Algorithm
+With round robin, the load balancer distributes requests sequentially across instances.
+Example with 3 servers:
+1. Request 1 → Server A
+2. Request 2 → Server B
+3. Request 3 → Server C
+4. Request 4 → Server A
+5. Request 5 → Server B
+This gives balanced traffic distribution.
+
+When combined with sticky sessions, it becomes predictable and stable for legacy applications.
+
+# Sticky Sessions (Session Affinity)
+Sticky sessions mean:
+Once a user connects to a server, future requests from that user continue going to the same server.
+The load balancer usually does this using a cookie.
+
+# session affinity (sticky sessions) is supported with all three AWS Application Load Balancer target group routing algorithms:
+1. Round robin (default)
+2. Least outstanding requests
+3. Weighted random
+
+# What is Anomaly mitigation in AWS ALB?
+In AWS Application Load Balancer (ALB), Anomaly Mitigation is a feature of Automatic Target Weights (ATW) that automatically reduces traffic to unhealthy or poorly performing targets before they completely fail health checks.
+How it works:
+Suppose you have 5 EC2 instances behind an ALB.
+Normally:
+• Each instance receives ~20% traffic.
+Now imagine:
+• One instance starts returning many 500 errors.
+• Health checks still pass, so ALB considers it "healthy."
+Without anomaly mitigation:
+• ALB keeps sending normal traffic to it.
+With anomaly mitigation:
+• ALB detects higher error rates on that instance.
+• Traffic to that instance is automatically reduced.
+• Healthy targets receive more traffic instead.
+
+ 

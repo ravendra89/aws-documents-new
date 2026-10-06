@@ -1,0 +1,68 @@
+
+Migration of windows servers 2016 to 2022.
+1. copy the file from old server to new server.
+run the following command on the new server-
+
+windows + r
+
+\\hostname\C$
+ 
+mention the hostname of old server.
+
+
+2. if data is not in file formate then run below script on old server to generate a file for those data then use about command to copy the data from old server to new server.
+
+Step 1: Export all tasks from OLD server
+Run this on the old server
+===================================
+ 
+$exportPath = "C:\TaskBackup"
+New-Item -ItemType Directory -Path $exportPath -Force
+ 
+$tasks = Get-ScheduledTask | Where-Object { $_.TaskName -notlike "Optimize*" }
+ 
+foreach ($task in $tasks) {
+    $taskName = $task.TaskName
+    $safeName = $taskName -replace '[\\/:*?"<>|]', '_'
+ 
+    try {
+        $xmlPath = "$exportPath\$safeName.xml"
+        Export-ScheduledTask -TaskName $taskName -TaskPath $task.TaskPath | Out-File $xmlPath -Encoding UTF8
+        Write-Host "Exported: $taskName"
+    }
+    catch {
+        Write-Host "Failed: $taskName - $($_.Exception.Message)"
+    }
+}
+ 
+========================================
+Step 2: Copy files to NEW server
+========================================
+ 
+Step 3: Import tasks on NEW server
+Run this on new server:
+========================================
+ 
+$importPath = "C:\TaskBackup"
+ 
+Get-ChildItem $importPath -Filter *.xml | ForEach-Object {
+ 
+    $taskName = $_.BaseName
+    $xml = Get-Content $_.FullName | Out-String
+ 
+    try {
+        # Import task
+        Register-ScheduledTask -TaskName $taskName `
+            -Xml $xml `
+            -Force
+ 
+        # Disable task immediately after creation
+        Disable-ScheduledTask -TaskName $taskName
+ 
+        Write-Host "Imported & Disabled: $taskName"
+    }
+    catch {
+        Write-Host "Failed: $taskName - $($_.Exception.Message)"
+    }
+}
+

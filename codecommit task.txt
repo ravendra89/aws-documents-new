@@ -1,0 +1,224 @@
+How to setup SSH connections to AWS CodeCommit repositories on Linux, macOS, or Unix
+
+https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-ssh-unixes.html
+
+Note:- To push code to codecommit repository, first make connection over the ssh using below given step then setup git global credentials then clone the codecommit repository and create or go
+inside the folder then run git init command.
+then copy our code from source to current location then add, commit and push code to codecommit repository.
+ 
+
+Step 1: Initial configuration for CodeCommit
+
+Sign in to the AWS Console and open the IAM console at https://console.aws.amazon.com/iam/
+
+In the IAM console, in the navigation pane, choose Users, and then choose the IAM user you want to configure for CodeCommit access.
+
+On the Permissions tab, choose Add Permissions.
+
+In Grant permissions, choose Attach existing policies directly.
+
+From the list of policies, select AWSCodeCommitPowerUser or another managed policy for CodeCommit access. For more information, see AWS managed policies for CodeCommit.
+
+After you have selected the policy you want to attach, choose Next: Review to review the list of policies to attach to the IAM user. If the list is correct, choose Add permissions.
+
+
+
+
+
+Step 2: Install Git
+
+
+
+ * You can install Git according to your OS 
+
+   For Redhat/CentOs/ Rocky Linux 
+
+
+
+#yum install git
+ 
+
+   For Ubuntu
+
+ 
+
+#apt-get install git
+
+
+
+
+Step 3: Configure credentials on Linux, macOS, or
+             Unix
+
+
+
+Set up the public and private keys for Git and CodeCommit
+
+
+
+* From the terminal on your local machine, run the ssh-keygen command, and follow the directions to save the file to the .ssh directory for your profile.
+
+
+
+#ssh-keygen -t rsa -b 4096
+
+
+* Run the following command to display the value of the public key file
+
+#cat ~/.ssh/id_rsa.pub
+
+
+ * Copy this value. It looks similar to the following:
+
+ssh-rsa EXAMPLE-AfICCQD6m7oRw0uXOjANBgkqhkiG9w0BAQUFADCBiDELMAkGA1UEBhMCVVMxCzAJB
+gNVBAgTAldBMRAwDgYDVQQHEwdTZWF0dGxlMQ8wDQYDVQQKEwZBbWF6b24xFDASBgNVBAsTC0lBTSBDb25zb2xlMRIwEAYDVQQDEwlUZXN0Q2lsYWMxHzAdBgkqhkiG9w0BCQEWEG5vb25lQGFtYXpvbi5jb20wHhc
+NMTEwNDI1MjA0NTIxWhcNMTIwNDI0MjA0NTIxWjCBiDELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAldBMRAwDgYDVQQHEwdTZWF0dGxlMQ8wDQYDVQQKEwZBbWF6b24xFDAS=EXAMPLE user-name@ip-192-0-2-137
+
+
+* Sign in to the AWS Management Console and open the IAM console at
+
+
+
+In the IAM console, in the navigation pane, choose Users, and from the list of users, choose your IAM user.
+
+On the user details page, choose the Security Credentials tab, and then choose Upload SSH public key.
+
+Paste the contents of your SSH public key into the field, and then choose Upload SSH public key.
+
+Copy or save the information in SSH Key ID (for example, APKAQ3UXKUGFSQJSJMVK)
+
+5. On your local machine, use a text editor to create a config file in the ~/.ssh directory, and then add the following lines to the file, where 
+the value for User is the SSH key ID you copied earlier:
+
+
+
+# vim   ~/.ssh/config
+
+Host git-codecommit.*.amazonaws.com
+  User APKAYTAJ44C6TEIWF4PI
+  IdentityFile ~/.ssh/id_rsa
+
+
+
+#chmod 600  ~/.ssh/config
+
+OR
+Generate HTTPS Credentials from Iam user from security credentials block- HTTPS Git credentials for AWS CodeCommit
+then clone http url from codecommit repo
+
+6. Run the following command to test your SSH configuration:
+
+#ssh git-codecommit.us-east-2.amazonaws.com 
+
+
+For information to help you troubleshoot problems, run the ssh command with the -v parameter. For example:
+
+#ssh -v git-codecommit.us-east-2.amazonaws.com
+
+
+Step 4: Connect to the CodeCommit console and clone the  
+              repository
+
+
+ * Copy the SSH URL for the repo from AWS Console 
+
+ * Open a terminal. create a directory where you want to clone  , run the git clone command with the SSH URL you copied to clone the repository
+
+git clone ssh://git-codecommit.us-east-2.amazonaws.com/v1/repos/MyDemoRepo  my-demo-repo
+
+EX:-
+
+git clone ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/devops-repo
+
+cp -r /c/Users/RavendraTiwari/Desktop/splunk-automation-2/* /c/Users/RavendraTiwari/Desktop/devops-repo/terraform/ssm/splunk-automation
+
+
+Step 5: Git management Commands 
+
+You can use below given command for managing git or CodeCommit  
+
+$ cd  my-demo-repo
+$ touch first-file 
+$ git status
+$ git add first-file
+$ git status
+$git config --global user.name "Your Name Here"
+$git config --global user.email "your.email@example.com"
+$ git commit -m "my first commit to aws CodeCommit"
+$ git log 
+
+* Puch changes to AWS CodeCommit 
+
+$ git push origin master    or  git push origin main  #as per your environment 
+
+ * Create new branch 
+
+$git branch new-branch-name
+
+* Switch to new branch 
+
+$git checkout new-branch-name
+
+* Push the New Branch to CodeCommit
+
+$git push origin new-branch-name
+
+* Get update from CodeCommit Repo 
+
+$git pull origin branch-name
+
+
+*Revert a specific commit 
+
+$git log 
+$git revert <commit-hash>
+
+ 
+
+* To merge changes from a staging branch to the master branch in Git, you typically follow these steps:
+
+Assuming you're currently on the `master` branch:
+
+1. Checkout the Staging Branch:
+ 
+$git checkout staging 
+   
+
+2. Merge Staging into Master:
+   
+$git merge staging 
+   
+
+   This command merges the changes from the `staging` branch into the currently checked-out branch (which should be `master` if you followed step 1).
+
+
+   If there are no conflicts, Git will automatically perform a fast-forward merge or create a new merge commit.
+
+3. Resolve Conflicts (if any):
+     If there are conflicts, Git will prompt you to resolve them. Open the files with conflicts,     
+      resolve the issues, and then:
+
+$ git add <conflicted-file>
+
+
+   After resolving conflicts, complete the merge:
+
+$ git merge --continue
+
+
+4. Commit the Merge (if not done automatically):
+       If a new merge commit wasn't automatically created (e.g., due to conflicts), you might need
+       to commit the changes manually:
+
+$git commit -m "Merge staging into master"
+
+
+5. Push Changes to Remote:
+   
+$ git push origin master
+
+   This command pushes the merged changes to the remote `master` branch.
+
+After these steps, your `master` branch should include the changes from the `staging` branch. If you encounter conflicts during the merge, make sure to resolve them before completing the merge.
+
+Remember to adapt the branch names based on your actual branch structure. If you're not already on the `master` branch, you can switch to it using `git checkout master` before starting the merge.

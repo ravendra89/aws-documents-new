@@ -1,0 +1,11 @@
+# To see your instance event in CloudTrail, complete the following steps:
+
+1) Open the CloudTrail console.
+2) In the navigation pane, choose Event history.
+3) In the Lookup attributes dropdown list, choose Event name.
+@ For the Event name text box, enter one of the following event names, depending on your situation:
+1) StopInstances when your instance was stopped.
+2) RebootInstances when your instance was rebooted.
+3) TerminateInstances when your instance was terminated.
+4) From the events list, select the event name.
+5) On the Details page, you can see the username of the AWS Identity and Access Management (IAM) identity that initiated the event.

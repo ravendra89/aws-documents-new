@@ -1,0 +1,14 @@
+# What is AWS Cost Explorer?
+
+it is A visualization and analysis tool to understand, analyze, and forecast your AWS spending over time.
+
+Problem it solves: Your AWS bill is complex — hundreds of services, regions, usage types. Cost Explorer breaks it down so you can see exactly where money is going and why.
+
+What you can do:
+
+View costs by service, region, account, tag, usage type
+Spot trends and cost spikes
+Forecast next month's spend
+Get rightsizing recommendations (e.g., downsize over-provisioned EC2)
+Detect anomalies (unusual cost increases)
+Analyze Reserved Instance and Savings Plans coverage/utilization

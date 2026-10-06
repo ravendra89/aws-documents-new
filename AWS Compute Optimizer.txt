@@ -1,0 +1,10 @@
+AWS Compute Optimizer is a service that analyzes our AWS resources configuration and utilization metrics to provide rightsizing recommendations and identify idle resources.
+
+
+
+Note: 
+# Under-provisioned: Resource does not have enough capacity to handle its workload.
+
+# Over-provisioned: Resource has more capacity than it needs.
+
+# Optimized: Resource is right-sized for its workload.

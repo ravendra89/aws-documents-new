@@ -1,0 +1,45 @@
+# to check attached EBS valume to the instance
+aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=i-0bccbb889f4116e34
+OR
+aws ec2 describe-volumes --filters Name=attachment.instance-id,Values=i-0bccbb889f4116e34 --query "Volumes[*].{ID:VolumeId,Device:Attachments[0].Device}" --output table
+OR
+aws ec2 describe-instances --instance-id i-0bccbb889f4116e34 --query "Reservations[].Instances[].BlockDeviceMappings[]"
+
+
+
+# To verify if EBS volumes are attached to a Linux EC2 instance but not mounted, you can: 
+ 
+Check the console
+Open the Amazon EC2 console and navigate to the Instances section. Select the instance, then go to the Storage tab and look at the Block devices section. 
+ 
+Use the lsblk command
+Connect to the EC2 instance using SSH and use the lsblk command to list the available block devices. Identify the attached volume. 
+ 
+Use the file -s command
+Use the file -s command to get information about a specific device, such as its file system type. If the output shows "data", there is no file system on the device. If the device has a file system, the command will show information about the file system type.
+file -s /dev/
+
+# For the NVMe EBS volumes, follw the below steps-
+Links for more details- https://docs.aws.amazon.com/ebs/latest/userguide/identify-nvme-ebs-device.html
+
+
+
+[root@ip-10-12-38-235 bin]# lsblk
+NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+nvme1n1       259:0    0  100G  0 disk
+nvme2n1       259:1    0  100G  0 disk
+nvme0n1       259:2    0   30G  0 disk
+├─nvme0n1p1   259:3    0   30G  0 part /
+└─nvme0n1p128 259:4    0    1M  0 part
+[root@ip-10-12-38-235 bin]# sudo /sbin/ebsnvme-id /dev/nvme0n1
+Volume ID: vol-06455fb438041794d
+xvda
+[root@ip-10-12-38-235 bin]# sudo /sbin/ebsnvme-id /dev/nvme1n1
+Volume ID: vol-09e77d56ea96f50a4
+xvdcz
+[root@ip-10-12-38-235 bin]# sudo /sbin/ebsnvme-id /dev/nvme2n1
+Volume ID: vol-04ecac96c300f8efb
+sdg
+[root@ip-10-12-38-235 bin]#
+ 
+

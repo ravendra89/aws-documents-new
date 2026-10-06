@@ -1,0 +1,12 @@
+What is AWS Resource Explorer?
+
+It is A search and discovery service that lets you to find and view AWS resources across your entire account and all regions — from one place.
+
+Problem it solves: Without it, to find all your EC2 instances, S3 buckets, Lambda functions etc., you'd have to log into each region separately. Resource Explorer indexes everything globally.
+
+What you can do:
+
+Search resources by type, tag, region, or name across all regions
+Find untagged or orphaned resources
+Discover resources you forgot about
+Build views/filters for specific resource groups (e.g., "all prod resources" or "all resources in us-east-1")

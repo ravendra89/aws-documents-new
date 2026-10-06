@@ -1,0 +1,1 @@
+We cannot directly reduce the size of an Amazon EBS volume; we can only increase it. To achieve a smaller volume, we need to create a new, smaller volume and then migrate your data to it using an application-level tool like rsync or robocopy

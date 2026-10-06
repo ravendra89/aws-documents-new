@@ -1,0 +1,108 @@
+# Datadog Tags
+
+https://docs.datadoghq.com/getting_started/tagging/
+https://docs.datadoghq.com/getting_started/tagging/assigning_tags/?tab=noncontainerizedenvironments#configuration-files
+
+
+# Links for installation and integration with sql DB.
+
+https://docs.datadoghq.com/integrations/sql-server/?tab=host
+
+# Complete steps for datadog integration with sql DB
+
+1. Install datadog agent on the server.
+
+2. Login to SQL DB and check the SQL Server version, sql server name and  sql server port (username and credentials is required)
+
+
+Run this query in SQL Server Management Studio (SSMS) or any SQL query tool:
+
+SELECT @@VERSION;
+
+
+Check the sql server name and other details:
+
+SELECT 
+    @@SERVERNAME AS ServerName,
+    SERVERPROPERTY('MachineName') AS MachineName,
+    SERVERPROPERTY('InstanceName') AS InstanceName,
+    SERVERPROPERTY('Edition') AS Edition,
+    SERVERPROPERTY('ProductVersion') AS ProductVersion
+
+Check the sql server port:
+
+SELECT DISTINCT local_tcp_port 
+FROM sys.dm_exec_connections 
+WHERE local_tcp_port IS NOT NULL;
+
+
+3. Open the file-  "C:\ProgramData\Datadog\conf.d\sqlserver.d\conf.yaml.example" and rename this file name "conf.yaml.example" to conf.yaml and update existing value with below details-
+
+init_config:
+
+instances:
+  - host: "QA-DB-NODE-2,1433"
+    username: datadog
+    password: "8cpSfgs!qUAqMY"
+    connector: adodbapi
+    adoprovider: MSOLEDBSQL # MSOLEDBSQL- for version 2016
+
+
+Note: No need to perform above steps because I have updated conf.yaml file. only we need to update host name, and tags and other parameter if required and replace 
+
+file name "conf.yaml.example" with updated conf.yaml file.
+
+
+4. Save the file.
+
+
+5. Restart the Datadog Agent
+Search "datadog agent manager" from the start menu in the server and click on restart the agent.
+
+6. datadog agent manager- click on status - collector - scroll dowm - and i can find all the metrics that the datadog is collection and sending to datadog dashboard.
+check sqlserver section- if the status is showing OK then the integration is correct.
+
+Example: Instance ID: sqlserver:53edace9396fc66a [OK]
+
+
+7. Go to datadog dashboard - metrics- explorer- and search for custom metrics queries
+
+Search by env and hostname that we defined in the confon.yaml file
+
+
+#####################################################################################################################
+
+
+# optional: check the status and restart the service using Powershell commands:
+
+Restart-Service datadogagent
+Restart-Service datadogagent -Force
+Get-Service datadogagent
+
+
+# If I get an error about the provider
+
+Open Control Panel → Programs → Programs and Features
+
+That means the Microsoft OLE DB Driver for SQL Server is not installed on the Datadog Agent host.
+
+ need to install:
+
+Microsoft OLE DB Driver for SQL Server (MSOLEDBSQL)
+
+
+# SQLOLEDB vs MSOLEDBSQL (what’s the difference?)
+Provider	  Status	                   Notes
+SQLOLEDB	 Deprecated	             Still works, but no longer maintained by Microsoft
+MSOLEDBSQL	 Recommended	             Actively supported, supports newer TLS and features
+MSOLEDBSQL19 For SQL Server 2019+	 Newer version of MSOLEDBSQL
+
+For SQL Server 2016 (v13):
+
+Best practice: MSOLEDBSQL
+
+Still valid (if already installed): SQLOLEDB
+
+
+
+
